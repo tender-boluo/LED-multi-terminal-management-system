@@ -3,8 +3,9 @@ import 'views/homepage.dart';
 import 'views/common.dart';
 import 'views/mediaFile.dart';
 import 'views/setting.dart';
+import 'views/insert.dart';
 
-void main() {
+void main() async {
   runApp(new MyApp());
 }
 
@@ -18,6 +19,7 @@ class MyApp extends StatelessWidget {
       ),
       home: new HomePage(title: 'LED-terminal'),
         routes: <String, WidgetBuilder> {
+          '/insert' : (BuildContext context) => new InsertImages(),
           '/common'  : (BuildContext context) => new Common(),
           '/media-file'    : (BuildContext context) => new MediaFile(),
           '/setting': (BuildContext context) => new Setting(),

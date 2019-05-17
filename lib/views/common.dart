@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:dio/dio.dart';
 import 'dart:ui';
 
 class Common extends StatefulWidget {
@@ -25,7 +26,6 @@ class _Common extends State<Common> {
       ));
     super.initState();
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

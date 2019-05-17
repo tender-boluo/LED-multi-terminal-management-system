@@ -6,7 +6,7 @@ class CommonButton extends StatelessWidget {
   final String route;
   @override
   Widget build(BuildContext context) {
-    return new Padding(padding: new EdgeInsets.fromLTRB(25, 0, 15, 0),
+    return new Padding(padding: new EdgeInsets.fromLTRB(8, 0, 0, 0),
       child:
         new OutlineButton(
           onPressed: () { Navigator.of(context).pushNamed(route);},
