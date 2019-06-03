@@ -30,6 +30,7 @@ class _HomePageState extends State<HomePage> {
           ),
           new Row(
             children: <Widget>[
+              new CommonButton(text: '上传图片', route: '/insert'),
               new CommonButton(text: '常规设置', route: '/common'),
               new CommonButton(text: '媒体文件', route: '/media-file'),
               new CommonButton(text: '播放设置', route: '/setting'),
