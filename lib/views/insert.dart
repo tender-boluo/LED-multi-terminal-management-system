@@ -5,7 +5,10 @@ import 'package:crypto/crypto.dart';
 import 'dart:io';
 import 'dart:async';
 import 'dart:convert';
+
 import '../common/oss.dart';
+import '../common/databaseHelper.dart';
+import '../model/images.dart';
 
 class InsertImages extends StatefulWidget {
   @override
@@ -15,7 +18,7 @@ class InsertImages extends StatefulWidget {
 class _InsertImagesState extends State<InsertImages> {
 
   var _imgPath;
-  var error;
+  var _putFlag;
 
   @override
   Widget build(BuildContext context) {
@@ -45,9 +48,13 @@ class _InsertImagesState extends State<InsertImages> {
   }
 
   Widget _imageView(imgPath) {
-    if (imgPath == null) {
+    if (imgPath == null && _putFlag != 1) {
       return Center(
         child: Text("请选择图片或拍照"),
+      );
+    } else if(imgPath == null && _putFlag == 1){
+      return Center(
+        child: Text("图片上传成功"),
       );
     } else {
       return Image.file(
@@ -83,7 +90,7 @@ class _InsertImagesState extends State<InsertImages> {
     String fileName = (DateTime.now().millisecondsSinceEpoch/1000).ceil().toString()+".jpg";
 
     FormData data = new FormData.from({
-      'Filename': '文件名，随意',
+      'Filename': fileName,
       'key' : fileName,
       'policy': policyBase64,
       'OSSAccessKeyId': Oss().key,
@@ -92,16 +99,17 @@ class _InsertImagesState extends State<InsertImages> {
       'file': new UploadFileInfo(_imgPath, "imageFileName")
     });
     try {
+      var db = DatabaseHelper();
+      var image = Images(fileName);
+      db.saveImage(image);
       await dio.post('https://software-terminal.oss-cn-beijing.aliyuncs.com/',data: data);
-//      Response response = await dio.post('https://software-terminal.oss-cn-beijing.aliyuncs.com/',data: data);
-//      print(response.headers);
-//      print(response.data);
+      setState(() {
+        _imgPath = null;
+        _putFlag = 1;
+      });
 
     } on DioError catch(e) {
-      print(e.message);
-      print(e.response.data);
-      print(e.response.headers);
-      print(e.response.request);
+      print("图片上传失败");
     }
   }
 }

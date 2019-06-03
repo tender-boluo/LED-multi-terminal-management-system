@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
-import 'package:dio/dio.dart';
 import 'dart:ui';
+
+import '../common/databaseHelper.dart';
 
 class Common extends StatefulWidget {
   @override
@@ -13,19 +14,28 @@ class _Common extends State<Common> {
   static double _width = mediaQuery.size.width;
   static double _height = mediaQuery.size.height;
   List<Widget> imageList = List();
+  List<Map<String, dynamic>> allImages = List();
+  var db = DatabaseHelper();
+  int cnt = 0;
+
+  setData() async {
+    cnt = await db.getCount();
+  }
   @override
   void initState() {
-    imageList
-      ..add(Image.network(
-        'http://software-terminal.oss-cn-beijing.aliyuncs.com/B6E83C5081AD55903216BFD9784FB18B.jpg',
-        fit: BoxFit.fill,
-      ))
-      ..add(Image.network(
-        'http://software-terminal.oss-cn-beijing.aliyuncs.com/C7F1BE994882B9E7B777E2C9B78B56A5.jpg',
-        fit: BoxFit.fill,
-      ));
+    setData();
+    for(int i = 0; i < allImages.length; i++){
+      Map<String, dynamic> tmp = allImages[i];
+      print(tmp['fileName']);
+      imageList
+        ..add(Image.network(
+          'https://software-terminal.oss-cn-beijing.aliyuncs.com/'+ tmp['fileName'],
+          fit: BoxFit.fill,
+        ));
+    }
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,7 +47,7 @@ class _Common extends State<Common> {
               itemBuilder: (BuildContext context,int index){
                 return imageList[index];
               },
-              itemCount: 2,
+              itemCount: cnt,
               autoplay: true,
               duration: 500,
             ),
